@@ -1,0 +1,6 @@
+APP_ENV=local
+
+SERVER_IP = '127.0.0.1'
+SERVER_PORT = '4000'
+
+MONGODB_CONNECT_URL = 'mongodb://l127.0.0.1:27017/digideck'
