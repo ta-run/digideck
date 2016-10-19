@@ -1,22 +1,36 @@
 'use strict';
 
-const db = require('../db')
-const handler = module.exports = {};
+const db 		= require('../db')
+const handler 	= module.exports = {}
+const util 		= require('../util')
 
 handler.get = function *() {
-	console.log(db)
+
+	console.log("token data: " + JSON.stringify(this.request.tokenData))
+
     var users = yield db.model.user.find({}).lean()
 	this.body = users
 }
 
 handler.post = function *() {
 
-	var user = createUser(this.request.body)
+	var user = yield db.model.user.findOne({email: this.request.body.email}).lean()
 
-	yield user.save()
-	this.body = user
+	if (!user) {
+		// no user found for given email . lets create a new one instead.
+		user = createUser(this.request.body)
+		yield user.save()
+		user = user.toObject()
+	}
+
+	// claim object for jwt.
+	var claim = {}
+	claim.name = user.full_name
+	claim.email = user.email
+
+	var token = util.jwt.generateToken(claim)
+	this.body = {user: user, token: token}
 }
-
 
 function createUser(body) {
 	var user = db.model.user()

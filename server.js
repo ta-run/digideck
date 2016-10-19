@@ -8,6 +8,9 @@ const compose      	= require('koa-compose')       		// middleware composer
 const compress     	= require('koa-compress')      		// HTTP compression
 const responseTime 	= require('koa-response-time') 		// X-Response-Time middleware
 const logger 		= require('koa-logger')
+const jwt 			= require('jsonwebtoken')
+const bearerToken	= require('koa-bearer-token')
+const util 			= require('./api/util')
 
 const router = require('./api/route')
 const app = module.exports = koa()
@@ -32,6 +35,22 @@ app.use(function *(next) {
 	  }
 })
 
+// Auth Token
+app.use(bearerToken())
+app.use(function *(next) {
+	if(this.request.token) {
+		var claim = util.jwt.validate(this.request)
+		if (claim) {
+			this.request.tokenData = claim
+		} else {
+			this.throw(401, 'Invalid Token', 'Invalid Token')
+		}
+	} else {
+  		this.throw(401, 'Unauthorized', 'Invalid token, forgot the Bearer?')
+	}	
+	yield next
+})
+
 // HTTP compression
 app.use(compress({}))
 
@@ -39,9 +58,6 @@ app.use(compress({}))
 app.use(body())
 app.use(logger())
 app.use(router)
-
-// DB config
-// TODO
 
 app.listen(process.env.SERVER_PORT, function() {
 	console.log("server started at PORT: " + process.env.SERVER_PORT)
