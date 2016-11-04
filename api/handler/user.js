@@ -6,7 +6,7 @@ const util 		= require('../util')
 
 handler.get = function *() {
 
-	console.log("token data: " + JSON.stringify(this.request.tokenData))
+	console.log(this.query)
 
     var users = yield db.model.user.find({}).lean()
 	this.body = users
