@@ -14,6 +14,8 @@ router.get('/deck', handler.deck.get)
 
 router.redirect('/industry', '/admin/industry')
 
+router.get('/sectionslide', handler.sectionslide.get)
+
 router.get('/admin/:entity', handler.admin.get)
 router.post('/admin/:entity', handler.admin.post)
 router.delete('/admin/:entity', handler.admin.delete)

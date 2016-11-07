@@ -9,6 +9,7 @@ var schema = new Schema({
     },
 	slide: {
         type: Schema.Types.ObjectId,
+        ref: 'slide',
         required: true
     },
 	sequence: {

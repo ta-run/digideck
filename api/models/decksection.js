@@ -9,6 +9,7 @@ var schema = new Schema({
     },
 	section: {
         type: Schema.Types.ObjectId,
+        ref: 'section',
         required: true
     },
 	sequence: {
