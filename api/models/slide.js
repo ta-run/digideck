@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var schema = new Schema({
 	template_type: {
 		type: String,
-		enum: ['default'],
+		enum: ['default','header','video','hero_image'],
 		required: true
 	},
 	title: {
@@ -13,8 +13,7 @@ var schema = new Schema({
 		required: true
 	},
 	description: {
-		type: String,
-		required: true
+		type: String
 	},
 	img_url: {
 		type: String

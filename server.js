@@ -31,7 +31,7 @@ app.use(function *(next) {
 	  } catch (err) {
 	  	console.log(err)
 	    this.status = err.status || 500
-	    this.body = { name: err.name, code: err.code, error: err.message }
+	    this.body = { name: err.name, code: err.code, error: err.message+JSON.stringify(err.errors) }
 	    this.app.emit('error', err, this)
 	  }
 })
