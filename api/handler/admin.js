@@ -70,7 +70,11 @@ handler.patch = function *(next) {
 
 	var data = yield model.findById(this.params.id)
 
-	var data = new model();
+	if (!data) {
+		this.throw(420, 'No data found for requested id. ', 'No data found for requested id. ')
+		return
+	}
+	
 	db.decorateModel(model, data, this.request.body)
 
 	yield data.save()
